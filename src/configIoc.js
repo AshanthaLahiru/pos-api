@@ -4,6 +4,7 @@ import constants from "./utils/constants";
 import express from "express";
 import router from "./api/router";
 import mongodb from "mongodb";
+import swaggerJSDoc from "swagger-jsdoc"
 
 //Controllers
 import UserController from "./api/user/UserController";
@@ -17,9 +18,23 @@ import ItemService from "./services/ItemService";
 
 //Repositoryconstructorconstructorconstructor
 import UserRepository from "./repository/UserRepository";
-import BaseRepository from "./repository/BaseRepository";
 import OrderRepository from "./repository/OrderRepository";
 import ItemRepository from "./repository/ItemRepository";
+
+let swaggerDefinition = {
+  info: {
+    description: "POS System",
+    version: "1.0.0",
+    title: "POS RESTful API Documentation",
+  }
+}
+
+let options = {
+  swaggerDefinition: swaggerDefinition,
+  apis: ['dist/api/**/*.js']
+}
+
+let swaggerSpec = swaggerJSDoc(options);
 
 let container = awilix.createContainer({
   injectionMode: awilix.InjectionMode.CLASSIC
@@ -31,6 +46,7 @@ container.register({
   router: awilix.asClass(router).singleton(),
   constants: awilix.asValue(constants),
   mongoClient: awilix.asValue(mongodb.MongoClient),
+  swaggerSpec: awilix.asValue(swaggerSpec),
 
   // Register controllers
   userController: awilix.asClass(UserController).singleton(),
@@ -44,7 +60,6 @@ container.register({
 
   // Register repository
   userRepository: awilix.asClass(UserRepository).singleton(),
-  baseRepository: awilix.asClass(BaseRepository).singleton(),
   orderRepository: awilix.asClass(OrderRepository).singleton(),
   itemRepository: awilix.asClass(ItemRepository).singleton()
 });

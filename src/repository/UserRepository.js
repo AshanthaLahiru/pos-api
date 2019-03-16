@@ -1,6 +1,6 @@
-import BaseRepository from "./BaseRepository";
+let self
 
-let self, schema;
+import BaseRepository from "./BaseRepository";
 
 export default class UserRepository extends BaseRepository {
   constructor(constants, mongoClient) {

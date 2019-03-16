@@ -1,67 +1,66 @@
-let self;
 export default class BaseRepository {
   constructor(constants, mongoClient, collectionName) {
-    self = this;
-    self.constants = constants;
-    self.mongoClient = mongoClient;
-    self.collectionName = collectionName;
+
+    this.constants = constants;
+    this.mongoClient = mongoClient;
+    this.collectionName = collectionName;
   }
 
   _insert(object) {
-    return self.mongoClient
-      .connect(self.constants.dburl, { useNewUrlParser: true })
+    return this.mongoClient
+      .connect(this.constants.dburl, { useNewUrlParser: true })
       .then(client => {
         return client
-          .db(self.constants.dbname)
-          .collection(self.collectionName)
+          .db(this.constants.dbname)
+          .collection(this.collectionName)
           .insertOne(object)
           .then(result => result);
       });
   }
 
   _find(query) {
-    return self.mongoClient
-      .connect(self.constants.dburl, { useNewUrlParser: true })
+    return this.mongoClient
+      .connect(this.constants.dburl, { useNewUrlParser: true })
       .then(client => {
         return client
-          .db(self.constants.dbname)
-          .collection(self.collectionName)
+          .db(this.constants.dbname)
+          .collection(this.collectionName)
           .findOne(query)
           .then(result => result);
       });
   }
 
   _remove(query) {
-    return self.mongoClient
-      .connect(self.constants.dburl, { useNewUrlParser: true })
+    return this.mongoClient
+      .connect(this.constants.dburl, { useNewUrlParser: true })
       .then(client => {
         return client
-          .db(self.constants.dbname)
-          .collection(self.collectionName)
+          .db(this.constants.dbname)
+          .collection(this.collectionName)
           .remove(object)
           .then(result => result);
       });
   }
 
   _update(query, updateDoc) {
-    return self.mongoClient
-      .connect(self.constants.dburl, { useNewUrlParser: true })
+    return this.mongoClient
+      .connect(this.constants.dburl, { useNewUrlParser: true })
       .then(client => {
         return client
-          .db(self.constants.dbname)
-          .collection(self.collectionName)
+          .db(this.constants.dbname)
+          .collection(this.collectionName)
           .replaceOne(query, updateDoc)
           .then(result => result);
       });
   }
 
   _bulkInsert(docs, schema) {
-    return self.mongoClient
-      .connect(self.constants.dburl, { useNewUrlParser: true })
+    return this.mongoClient
+      .connect(this.constants.dburl, { useNewUrlParser: true })
       .then(client => {
         return client
-          .db(self.constants.dbname)
-          .collection(self.collectionName)
+          .db(this.constants.dbname)
+          .collection(this.collectionName)
           .inserAll(object)
           .then(result => result);
       });

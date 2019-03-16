@@ -56,8 +56,9 @@ export default class UserService {
   }
 
   loginUser(user) {
+    console.log(user)
     return self.userRepository.findUser(user.email).then(result => {
-      if (result.password == user.password) {
+      if (user && result && user.password && result.password && result.password == user.password) {
         return result;
       } else {
         return null;

@@ -35,7 +35,7 @@ export default class OrderController {
         if (result) {
           res.status(200).json(result);
         } else {
-          res.status(403).json({ status: "Fined Failed" });
+          res.status(403).json({ status: "Find Failed" });
         }
       })
       .catch(err => {
