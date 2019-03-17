@@ -1,10 +1,11 @@
 let self;
 
 export default class UserService {
-  constructor(constants, userRepository) {
+  constructor(constants, userRepository, jwt) {
     self = this;
     self.constants = constants;
     self.userRepository = userRepository;
+    self.jwt = jwt;
   }
 
   insertUser(user) {
@@ -59,6 +60,16 @@ export default class UserService {
     console.log(user)
     return self.userRepository.findUser(user.email).then(result => {
       if (user && result && user.password && result.password && result.password == user.password) {
+        let claims = {
+          sub: user.email,
+          iss: 'pos',
+          permissions: 'user'
+        }
+
+        let jwtToken = self.jwt.create(claims, self.constants.jwtSecretKey).compact();
+
+        result['auth-token'] = jwtToken;
+
         return result;
       } else {
         return null;

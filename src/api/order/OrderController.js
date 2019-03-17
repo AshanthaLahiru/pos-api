@@ -1,18 +1,52 @@
 let self;
 
 export default class OrderController {
-  constructor(express, orderService, constants) {
+  constructor(express, orderService, constants, auth) {
     self = this;
     self.expressRouter = new express.Router();
     self.orderService = orderService;
     self.constants = constants;
+    self.auth = auth;
 
-    self.expressRouter.post("/", self.createOrder);
-    self.expressRouter.put("/:email", self.updateOrderByOrderId);
-    self.expressRouter.get("/:email", self.getOrdersByEmail);
-    self.expressRouter.delete("/:email", self.removeOrderByOrderId);
+    self.expressRouter.post("/", self.auth.verifyToken, self.createOrder);
+    self.expressRouter.put("/:orderId", self.auth.verifyToken, self.updateOrderByOrderId);
+    self.expressRouter.get("/user/:email", self.auth.verifyToken, self.getOrdersByEmail);
+    self.expressRouter.delete("/:orderId", self.auth.verifyToken, self.removeOrderByOrderId);
   }
 
+  /**
+   * @swagger
+   * /order/:
+   *   post:
+   *     tags:
+   *       - Order
+   *     security: 
+   *       - Bearer: []
+   *     description: Create an order
+   *     parameters:
+   *       - name: order
+   *         in: body
+   *         required: true
+   *         description: Order
+   *         schema:
+   *           $ref: "#/definitions/Order"
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       201:
+   *         description: Successfully created
+   *         schema:
+   *           type: object
+   *           properties:
+   *            status: 
+   *              type: string
+   *       400:
+   *         description: Bad Request
+   *       401:
+   *         description: Unauthorized
+   *       500:
+   *         description: An unknown issue occurred
+   */
   createOrder(req, res, next) {
     self.orderService
       .createOrder(req.body)
@@ -28,6 +62,35 @@ export default class OrderController {
       });
   }
 
+  /**
+   * @swagger
+   * /order/user/{email}:
+   *   get:
+   *     tags:
+   *       - Order
+   *     security: 
+   *       - Bearer: []
+   *     description: Get orders by email
+   *     parameters:
+   *       - name: email
+   *         in: path
+   *         type: string
+   *         required: true
+   *         description: Email of the user
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       200:
+   *         description: Retrieve successful
+   *         schema:
+   *          $ref: "#/definitions/Order"
+   *       400:
+   *         description: Bad Request
+   *       401:
+   *         description: Unauthorized
+   *       500:
+   *         description: An unknown issue occurred
+   */
   getOrdersByEmail(req, res, next) {
     self.orderService
       .getOrdersByEmail(req.params.email)
@@ -43,21 +106,38 @@ export default class OrderController {
       });
   }
 
-  updateOrderByOrderId(req, res, next) {
-    self.orderService
-      .updateOrderByOrderId(req.params.name, req.body)
-      .then(result => {
-        if (result) {
-          res.status(200).json({ status: "Update Successful" });
-        } else {
-          res.status(403).json({ status: "Update Failed" });
-        }
-      })
-      .catch(err => {
-        return next(err);
-      });
-  }
-
+  /**
+   * @swagger
+   * /order/{orderId}:
+   *   delete:
+   *     tags:
+   *       - Order
+   *     security: 
+   *       - Bearer: []
+   *     description: Delete an order
+   *     parameters:
+   *       - name: orderId
+   *         in: path
+   *         type: string
+   *         required: true
+   *         description: Order ID
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       200:
+   *         description: Successfully deleted
+   *         schema:
+   *           type: object
+   *           properties:
+   *            status: 
+   *              type: string
+   *       400:
+   *         description: Bad Request
+   *       401:
+   *         description: Unauthorized
+   *       500:
+   *         description: An unknown issue occurred
+   */
   removeOrderByOrderId(req, res, next) {
     self.orderService
       .removeOrderByOrderId(req.params.name)
@@ -72,4 +152,68 @@ export default class OrderController {
         return next(err);
       });
   }
+
+  /**
+  * @swagger
+  * /order/{orderId}:
+  *   put:
+  *     tags:
+  *       - Order
+  *     security: 
+  *       - Bearer: []
+  *     description: Update a new order
+  *     parameters:
+  *       - name: orderId
+  *         in: path
+  *         type: string
+  *         required: true
+  *         description: Order ID
+  *       - name: order
+  *         in: body
+  *         required: true
+  *         description: Order
+  *         schema:
+  *           $ref: "#/definitions/Order"
+  *     produces:
+  *       - application/json
+  *     responses:
+  *       200:
+  *         description: Successfully updated
+  *         schema:
+  *           type: object
+  *           properties:
+  *            status: 
+  *              type: string
+  *       400:
+  *         description: Bad Request
+  *       401:
+  *         description: Unauthorized
+  *       500:
+  *         description: An unknown issue occurred
+  */
+  updateOrderByOrderId(req, res, next) {
+    self.orderService
+      .updateOrderByOrderId(req.params.name, req.body)
+      .then(result => {
+        if (result) {
+          res.status(200).json({ status: "Update Successful" });
+        } else {
+          res.status(403).json({ status: "Update Failed" });
+        }
+      })
+      .catch(err => {
+        return next(err);
+      });
+  }
 }
+
+/**
+  * @swagger
+  * definitions:
+  *  Order:
+  *     properties:
+  *       email:
+  *         type: string
+  *       items:
+  *         type: array
+  */

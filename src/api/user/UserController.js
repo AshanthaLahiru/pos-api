@@ -1,11 +1,12 @@
 let self;
 
 export default class UserController {
-  constructor(express, userService, constants) {
+  constructor(express, userService, constants, auth) {
     self = this;
     self.expressRouter = new express.Router();
     self.userService = userService;
     self.constants = constants;
+    self.auth = auth;
 
     self.expressRouter.post("/", self.insertUser);
     self.expressRouter.put("/:email", self.updateUser);
@@ -14,6 +15,39 @@ export default class UserController {
     self.expressRouter.post("/login", self.loginUser);
   }
 
+  /**
+   * @swagger
+   * /user/:
+   *   post:
+   *     tags:
+   *       - User
+   *     security: 
+   *       - Bearer: []
+   *     description: Add a new user
+   *     parameters:  
+   *       - name: user
+   *         in: body
+   *         required: true
+   *         description: User
+   *         schema:
+   *           $ref: "#/definitions/User"
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       201:
+   *         description: Successfully created
+   *         schema:
+   *           type: object
+   *           properties:
+   *            status: 
+   *              type: string
+   *       400:
+   *         description: Bad Request
+   *       401:
+   *         description: Unauthorized
+   *       500:
+   *         description: An unknown issue occurred
+   */
   insertUser(req, res, next) {
     self.userService
       .insertUser(req.body)
@@ -29,6 +63,35 @@ export default class UserController {
       });
   }
 
+  /**
+  * @swagger
+  * /user/{email}:
+  *   get:
+  *     tags:
+  *       - User   
+  *     security: 
+  *       - Bearer: []
+  *     description: Get user by email
+  *     parameters:
+  *       - name: email
+  *         type: string
+  *         in: path
+  *         required: true
+  *         description: Email of the user
+  *     produces:
+  *       - application/json
+  *     responses:
+  *       200:
+  *         description: User
+  *         schema:
+  *           $ref: "#/definitions/User"
+  *       400:
+  *         description: Bad Request
+  *       401:
+  *         description: Unauthorized
+  *       500:
+  *         description: An unknown issue occurred
+  */
   findUser(req, res, next) {
     self.userService
       .findUser(req.params.email)
@@ -44,6 +107,38 @@ export default class UserController {
       });
   }
 
+  /**
+  * @swagger
+  * /user/{email}:
+  *   put:
+  *     tags:
+  *       - User   
+  *     security: 
+  *       - Bearer: []
+  *     description: Get user by email
+  *     parameters:
+  *       - name: email
+  *         type: string
+  *         in: path
+  *         required: true
+  *         description: Email of the user
+  *     produces:
+  *       - application/json
+  *     responses:
+  *       200:
+  *         description: User
+  *         schema:
+  *           type: object
+  *           properties:
+  *            status: 
+  *              type: string
+  *       400:
+  *         description: Bad Request
+  *       401:
+  *         description: Unauthorized
+  *       500:
+  *         description: An unknown issue occurred
+  */
   updateUser(req, res, next) {
     self.userService
       .updateUser(req.params.name, req.body)
@@ -59,6 +154,38 @@ export default class UserController {
       });
   }
 
+  /**
+  * @swagger
+  * /user/{email}:
+  *   delete:
+  *     tags:
+  *       - User   
+  *     security: 
+  *       - Bearer: []
+  *     description: Get user by email
+  *     parameters:
+  *       - name: email
+  *         type: string
+  *         in: path
+  *         required: true
+  *         description: Email of the user
+  *     produces:
+  *       - application/json
+  *     responses:
+  *       200:
+  *         description: User
+  *         schema:
+  *           type: object
+  *           properties:
+  *            status: 
+  *              type: string
+  *       400:
+  *         description: Bad Request
+  *       401:
+  *         description: Unauthorized
+  *       500:
+  *         description: An unknown issue occurred
+  */
   removeUser(req, res, next) {
     self.userService
       .removeUser(req.params.name)
@@ -74,10 +201,50 @@ export default class UserController {
       });
   }
 
+  /**
+  * @swagger
+  * /user/login:
+  *   post:
+  *     tags:
+  *       - User   
+  *     description: Get user by email
+  *     parameters:
+  *       - name: credentials
+  *         in: body
+  *         description: Email of the user
+  *         schema:
+  *           type: object
+  *           properties:
+  *             email:
+  *               type: string
+  *               example: ashantha.lahiru@gmail.com
+  *             password:
+  *               type: string
+  *               example: abc
+  *     produces:
+  *       - application/json
+  *     responses:
+  *       200:
+  *         description: User
+  *         schema:
+  *           type: object
+  *           properties:
+  *            token: 
+  *              type: string
+  *       400:
+  *         description: Bad Request
+  *       401:
+  *         description: Unauthorized
+  *       500:
+  *         description: An unknown issue occurred
+  */
   loginUser(req, res, next) {
     self.userService
       .loginUser(req.body)
       .then(result => {
+
+
+
         if (result) {
           res.status(200).json(result);
         } else {
@@ -89,3 +256,14 @@ export default class UserController {
       });
   }
 }
+
+/**
+  * @swagger
+  * definitions:
+  *  User:
+  *     properties:
+  *       email:
+  *         type: string
+  *       name:
+  *         type: string
+  */

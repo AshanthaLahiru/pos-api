@@ -5,6 +5,10 @@ import express from "express";
 import router from "./api/router";
 import mongodb from "mongodb";
 import swaggerJSDoc from "swagger-jsdoc"
+import njwt from "njwt"
+
+//Middlewares
+import AuthorizationMW from "./middleware/AuthorizationMW"
 
 //Controllers
 import UserController from "./api/user/UserController";
@@ -25,7 +29,18 @@ let swaggerDefinition = {
   info: {
     description: "POS System",
     version: "1.0.0",
-    title: "POS RESTful API Documentation",
+    title: "POS RESTful API Documentation"
+  },
+  host: 'localhost:3000',
+  schemes: ['http'],
+  consumes: ["application/json"],
+  produces: ["application/json"],
+  securityDefinitions: {
+    Bearer: {
+      type: "apiKey",
+      name: "Authorization",
+      in: "header"
+    }
   }
 }
 
@@ -47,6 +62,10 @@ container.register({
   constants: awilix.asValue(constants),
   mongoClient: awilix.asValue(mongodb.MongoClient),
   swaggerSpec: awilix.asValue(swaggerSpec),
+  jwt: awilix.asValue(njwt),
+
+  //Middleware
+  auth: awilix.asClass(AuthorizationMW).singleton(),
 
   // Register controllers
   userController: awilix.asClass(UserController).singleton(),

@@ -8,11 +8,44 @@ export default class ItemController {
     self.constants = constants;
 
     self.expressRouter.post("/", self.createItem);
-    self.expressRouter.put("/:id", self.updateItemById);
-    self.expressRouter.get("/:id", self.getItemById);
-    self.expressRouter.delete("/:email", self.removeItemById);
+    self.expressRouter.put("/:itemId", self.updateItemById);
+    self.expressRouter.get("/:itemId", self.getItemById);
+    self.expressRouter.delete("/:itemId", self.removeItemById);
   }
 
+  /**
+   * @swagger
+   * /item/:
+   *   post:
+   *     tags:
+   *       - Item
+   *     security: 
+   *       - Bearer: []
+   *     description: Create an item
+   *     parameters:
+   *       - name: item
+   *         in: body
+   *         required: true
+   *         description: Order
+   *         schema:
+   *           $ref: "#/definitions/Item"
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       201:
+   *         description: Successfully created
+   *         schema:
+   *           type: object
+   *           properties:
+   *            status: 
+   *              type: string
+   *       400:
+   *         description: Bad Request
+   *       401:
+   *         description: Unauthorized
+   *       500:
+   *         description: An unknown issue occurred
+   */
   createItem(req, res, next) {
     self.itemService
       .createItem(req.body)
@@ -28,6 +61,35 @@ export default class ItemController {
       });
   }
 
+  /**
+   * @swagger
+   * /item/{itemId}:
+   *   get:
+   *     tags:
+   *       - Item
+   *     security: 
+   *       - Bearer: []
+   *     description: Get the item by itemId
+   *     parameters:
+   *       - name: itemId
+   *         in: path
+   *         required: true
+   *         description: Item ID
+   *         type: string
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       200:
+   *         description: Retrieve Successful
+   *         schema:
+   *           $ref: "#/definitions/Item"
+   *       400:
+   *         description: Bad Request
+   *       401:
+   *         description: Unauthorized
+   *       500:
+   *         description: An unknown issue occurred
+   */
   getItemById(req, res, next) {
     self.itemService
       .getItemById(req.params.id)
@@ -43,6 +105,44 @@ export default class ItemController {
       });
   }
 
+  /**
+   * @swagger
+   * /item/{itemId}:
+   *   put:
+   *     tags:
+   *       - Item
+   *     security: 
+   *       - Bearer: []
+   *     description: Update the item by itemId
+   *     parameters:
+   *       - name: itemId
+   *         in: path
+   *         required: true
+   *         description: Item ID
+   *         type: string
+   *       - name: item
+   *         in: body
+   *         required: true
+   *         description: Item 
+   *         schema:
+   *           $ref: "#/definitions/Item"
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       200:
+   *         description: Update Successful
+   *         schema:
+   *           type: object
+   *           properties:
+   *            status: 
+   *              type: string
+   *       400:
+   *         description: Bad Request
+   *       401:
+   *         description: Unauthorized
+   *       500:
+   *         description: An unknown issue occurred
+   */
   updateItemById(req, res, next) {
     self.itemService
       .updateOrderByOrderId(req.params.name, req.body)
@@ -58,6 +158,35 @@ export default class ItemController {
       });
   }
 
+  /**
+ * @swagger
+ * /item/{itemId}:
+ *   delete:
+ *     tags:
+ *       - Item
+ *     security: 
+ *       - Bearer: []
+ *     description: Delete the item by itemId
+ *     parameters:
+ *       - name: itemId
+ *         in: path
+ *         required: true
+ *         description: Item ID
+ *         type: string
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Delete Successful
+ *         schema:
+ *           $ref: "#/definitions/Item"
+ *       400:
+ *         description: Bad Request
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: An unknown issue occurred
+ */
   removeItemById(req, res, next) {
     self.itemService
       .removeOrderByOrderId(req.params.name)
@@ -73,3 +202,18 @@ export default class ItemController {
       });
   }
 }
+
+/**
+  * @swagger
+  * definitions:
+  *  Item:
+  *     properties:
+  *       id:
+  *         type: string
+  *       name:
+  *         type: string
+  *       description:
+  *         type: string
+  *       price:
+  *         type: string
+  */
