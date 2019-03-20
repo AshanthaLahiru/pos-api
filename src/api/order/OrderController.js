@@ -11,6 +11,7 @@ export default class OrderController {
     self.expressRouter.post("/", self.auth.verifyToken, self.createOrder);
     self.expressRouter.put("/:orderId", self.auth.verifyToken, self.updateOrderByOrderId);
     self.expressRouter.get("/user/:email", self.auth.verifyToken, self.getOrdersByEmail);
+    self.expressRouter.get("/:orderId/items", self.auth.verifyToken, self.getOrderItemsByOrderId);
     self.expressRouter.delete("/:orderId", self.auth.verifyToken, self.removeOrderByOrderId);
   }
 
@@ -106,6 +107,50 @@ export default class OrderController {
       });
   }
 
+
+  /**
+   * @swagger
+   * /order/{orderId}/items:
+   *   get:
+   *     tags:
+   *       - Order
+   *     security: 
+   *       - Bearer: []
+   *     description: Get orders by email
+   *     parameters:
+   *       - name: orderId
+   *         in: path
+   *         type: string
+   *         required: true
+   *         description: ID of the order
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       200:
+   *         description: Retrieve successful    
+   *       400:
+   *         description: Bad Request
+   *       401:
+   *         description: Unauthorized
+   *       500:
+   *         description: An unknown issue occurred
+   */
+  getOrderItemsByOrderId(req, res, next) {
+    self.orderService
+      .getOrderItemsByOrderId(req.params.orderId)
+      .then(result => {
+        if (result) {
+          res.status(200).json(result);
+        } else {
+          res.status(403).json({ status: "Find Failed" });
+        }
+      })
+      .catch(err => {
+        return next(err);
+      });
+  }
+
+
   /**
    * @swagger
    * /order/{orderId}:
@@ -193,7 +238,7 @@ export default class OrderController {
   */
   updateOrderByOrderId(req, res, next) {
     self.orderService
-      .updateOrderByOrderId(req.params.name, req.body)
+      .updateOrderByOrderId(req.params.orderId, req.body)
       .then(result => {
         if (result) {
           res.status(200).json({ status: "Update Successful" });

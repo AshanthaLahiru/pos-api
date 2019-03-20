@@ -10,6 +10,7 @@ export default class ItemController {
     self.expressRouter.post("/", self.createItem);
     self.expressRouter.put("/:itemId", self.updateItemById);
     self.expressRouter.get("/:itemId", self.getItemById);
+    self.expressRouter.get("/", self.getAllItems);
     self.expressRouter.delete("/:itemId", self.removeItemById);
   }
 
@@ -195,6 +196,46 @@ export default class ItemController {
           res.status(200).json({ status: "Delete Successful" });
         } else {
           res.status(403).json({ status: "Delete Failed" });
+        }
+      })
+      .catch(err => {
+        return next(err);
+      });
+  }
+
+  /**
+   * @swagger
+   * /item/:
+   *   get:
+   *     tags:
+   *       - Item
+   *     security: 
+   *       - Bearer: []
+   *     description: Get all items
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       200:
+   *         description: Retrieve Successful
+   *         schema:
+   *           type: array
+   *           items:
+   *            $ref: "#/definitions/Item"
+   *       400:
+   *         description: Bad Request
+   *       401:
+   *         description: Unauthorized
+   *       500:
+   *         description: An unknown issue occurred
+   */
+  getAllItems(req, res, next) {
+    self.itemService
+      .getAllItems(req.params.id)
+      .then(result => {
+        if (result) {
+          res.status(200).json(result);
+        } else {
+          res.status(403).json({ status: "Find Failed" });
         }
       })
       .catch(err => {

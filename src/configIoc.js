@@ -3,9 +3,10 @@ import * as awilix from "awilix";
 import constants from "./utils/constants";
 import express from "express";
 import router from "./api/router";
-import mongodb from "mongodb";
 import swaggerJSDoc from "swagger-jsdoc"
 import njwt from "njwt"
+import passwordHash from "password-hash"
+import MongoClient from "./utils/MongoClient"
 
 //Middlewares
 import AuthorizationMW from "./middleware/AuthorizationMW"
@@ -60,9 +61,10 @@ container.register({
   express: awilix.asValue(express),
   router: awilix.asClass(router).singleton(),
   constants: awilix.asValue(constants),
-  mongoClient: awilix.asValue(mongodb.MongoClient),
+  mongoClient: awilix.asClass(MongoClient).singleton(),
   swaggerSpec: awilix.asValue(swaggerSpec),
   jwt: awilix.asValue(njwt),
+  hash: awilix.asValue(passwordHash),
 
   //Middleware
   auth: awilix.asClass(AuthorizationMW).singleton(),

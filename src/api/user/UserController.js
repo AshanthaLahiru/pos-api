@@ -21,8 +21,6 @@ export default class UserController {
    *   post:
    *     tags:
    *       - User
-   *     security: 
-   *       - Bearer: []
    *     description: Add a new user
    *     parameters:  
    *       - name: user
@@ -30,7 +28,7 @@ export default class UserController {
    *         required: true
    *         description: User
    *         schema:
-   *           $ref: "#/definitions/User"
+   *           $ref: "#/definitions/UpdateUser"
    *     produces:
    *       - application/json
    *     responses:
@@ -99,7 +97,7 @@ export default class UserController {
         if (result) {
           res.status(200).json(result);
         } else {
-          res.status(403).json({ status: "Fined Failed" });
+          res.status(403).json({ status: "Find Failed" });
         }
       })
       .catch(err => {
@@ -242,17 +240,17 @@ export default class UserController {
     self.userService
       .loginUser(req.body)
       .then(result => {
-
-
-
-        if (result) {
+        if (result instanceof Error) {
+          throw result;
+        }
+        else if (result) {
           res.status(200).json(result);
         } else {
           res.status(403).json({ status: "Authentication Failed" });
         }
       })
       .catch(err => {
-        return next(err);
+        next(err);
       });
   }
 }
@@ -265,5 +263,14 @@ export default class UserController {
   *       email:
   *         type: string
   *       name:
+  *         type: string
+  *
+  *  UpdateUser:
+  *     properties:
+  *       email:
+  *         type: string
+  *       name:
+  *         type: string
+  *       password:
   *         type: string
   */

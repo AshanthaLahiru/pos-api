@@ -15,6 +15,15 @@ app.use(new CrossOriginMW().middleware)
 // Base router
 app.use("/", container.resolve("router"));
 
+app.use(function (err, req, res, next) {
+  res.status(500);
+  res.json({
+    code: err.name,
+    error: err.message,
+    stack: err.stack
+  });
+})
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is listening on ${PORT}`);

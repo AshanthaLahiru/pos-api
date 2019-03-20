@@ -55,4 +55,16 @@ export default class ItemService {
         return err;
       });
   }
+
+  getAllItems() {
+    return self.itemRepository
+      .getAllItems()
+      .then(result => {
+        return result;
+      })
+      .catch(err => {
+        console.log(err);
+        return err;
+      });
+  }
 }

@@ -37,6 +37,21 @@ export default class ItemRepository extends BaseRepository {
       });
   }
 
+  getAllItems() {
+    let query = {
+    };
+
+    return self
+      ._findAll(query)
+      .then(result => {
+        return result;
+      })
+      .catch(err => {
+        console.log(err);
+        return err;
+      });
+  }
+
   updateItemById(id, updateItem) {
     let query = {
       id

@@ -27,6 +27,22 @@ export default class OrderRepository extends BaseRepository {
     };
 
     return self
+      ._findAll(query)
+      .then(result => {
+        return result;
+      })
+      .catch(err => {
+        console.log(err);
+        return err;
+      });
+  }
+
+  getOrderByOrderId(orderId) {
+    let query = {
+      id: orderId
+    };
+
+    return self
       ._find(query)
       .then(result => {
         return result;
@@ -37,9 +53,9 @@ export default class OrderRepository extends BaseRepository {
       });
   }
 
-  updateOrderByOrderId(email, updateOrder) {
+  updateOrderByOrderId(id, updateOrder) {
     let query = {
-      email: email
+      id
     };
 
     return self
