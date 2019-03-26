@@ -1,10 +1,8 @@
 let self;
 
 export default class ItemService {
-  constructor(constants, userRepository, orderRepository, itemRepository) {
+  constructor(itemRepository) {
     self = this;
-    self.constants = constants;
-    self.orderRepository = orderRepository;
     self.itemRepository = itemRepository;
   }
 
@@ -14,10 +12,6 @@ export default class ItemService {
       .then(result => {
         return result;
       })
-      .catch(err => {
-        console.log(err);
-        return err;
-      });
   }
 
   removeItemById(orderId) {
@@ -26,10 +20,6 @@ export default class ItemService {
       .then(result => {
         return result;
       })
-      .catch(err => {
-        console.log(err);
-        return err;
-      });
   }
 
   updateItemById(orderId, order) {
@@ -38,10 +28,6 @@ export default class ItemService {
       .then(result => {
         return result;
       })
-      .catch(err => {
-        console.log(err);
-        return err;
-      });
   }
 
   getItemById(email) {
@@ -50,10 +36,6 @@ export default class ItemService {
       .then(result => {
         return result;
       })
-      .catch(err => {
-        console.log(err);
-        return err;
-      });
   }
 
   getAllItems() {
@@ -62,9 +44,5 @@ export default class ItemService {
       .then(result => {
         return result;
       })
-      .catch(err => {
-        console.log(err);
-        return err;
-      });
   }
 }

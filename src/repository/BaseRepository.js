@@ -36,7 +36,7 @@ export default class BaseRepository {
   _remove(query) {
     return this.mongoClient.getDB()
       .collection(this.collectionName)
-      .remove(object)
+      .deleteOne(query)
       .then(result => result);
 
   }

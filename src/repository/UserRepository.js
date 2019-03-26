@@ -13,7 +13,15 @@ export default class UserRepository extends BaseRepository {
     return self
       ._insert(user)
       .then(result => {
-        return result;
+        if (result.result.ok == 1) {
+          let res = {
+            status: "success"
+          }
+          return res;
+        }
+        else {
+          return null;
+        }
       })
       .catch(err => {
         console.log(err);
@@ -25,11 +33,14 @@ export default class UserRepository extends BaseRepository {
     let query = {
       email: email
     };
-
     return self
       ._find(query)
       .then(result => {
-        return result;
+        if (result) {
+          return result;
+        } else {
+          return null;
+        }
       })
       .catch(err => {
         console.log(err);
@@ -45,7 +56,14 @@ export default class UserRepository extends BaseRepository {
     return self
       ._update(query, updateUser)
       .then(result => {
-        return result;
+        if (result.result.ok == 1) {
+          let res = {
+            status: "success"
+          }
+          return res;
+        } else {
+          return null;
+        }
       })
       .catch(err => {
         console.log(err);
@@ -53,15 +71,22 @@ export default class UserRepository extends BaseRepository {
       });
   }
 
-  removeUser(name) {
+  removeUser(email) {
     let deleteUser = {
-      name: name
+      name: email
     };
 
     return self
-      ._remove(deleteUser, schema)
+      ._remove(deleteUser)
       .then(result => {
-        return result;
+        if (result.result.ok == 1) {
+          let res = {
+            status: "success"
+          }
+          return res;
+        } else {
+          return null;
+        }
       })
       .catch(err => {
         console.log(err);

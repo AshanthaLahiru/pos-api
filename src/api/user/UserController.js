@@ -139,7 +139,7 @@ export default class UserController {
   */
   updateUser(req, res, next) {
     self.userService
-      .updateUser(req.params.name, req.body)
+      .updateUser(req.params.email, req.body)
       .then(result => {
         if (result) {
           res.status(200).json({ status: "Update Successful" });

@@ -13,7 +13,14 @@ export default class ItemRepository extends BaseRepository {
     return self
       ._insert(item)
       .then(result => {
-        return result;
+        if (result && result.result.ok == 1) {
+          let res = {
+            status: "success"
+          }
+          return res;
+        } else {
+          return null;
+        }
       })
       .catch(err => {
         console.log(err);
@@ -60,7 +67,14 @@ export default class ItemRepository extends BaseRepository {
     return self
       ._update(query, updateItem)
       .then(result => {
-        return result;
+        if (result && result.result.ok == 1) {
+          let res = {
+            status: "success"
+          }
+          return res;
+        } else {
+          return null;
+        }
       })
       .catch(err => {
         console.log(err);
@@ -76,7 +90,14 @@ export default class ItemRepository extends BaseRepository {
     return self
       ._remove(deleteOrder)
       .then(result => {
-        return result;
+        if (result && result.result.ok == 1) {
+          let res = {
+            status: "success"
+          }
+          return res;
+        } else {
+          return null;
+        }
       })
       .catch(err => {
         console.log(err);

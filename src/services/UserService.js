@@ -25,42 +25,36 @@ export default class UserService {
           return null;
         }
       })
-      .catch(err => {
-        return err;
-      })
   }
 
   findUser(email) {
     return self.userRepository
       .findUser(email)
       .then(result => {
-        return result;
+        if (result) {
+          delete result._id;
+          return result;
+        }
+        else {
+          return result;
+        }
       })
-      .catch(err => {
-        return err;
-      });
   }
 
-  updateUser(name, user) {
+  updateUser(email, user) {
     return self.userRepository
-      .updateUser(name, user)
+      .updateUser(email, user)
       .then(result => {
         return result;
       })
-      .catch(err => {
-        return err;
-      });
   }
 
-  removeUser(name) {
+  removeUser(email) {
     return self.userRepository
-      .removeUser(name)
+      .removeUser(email)
       .then(result => {
         return result;
       })
-      .catch(err => {
-        return err;
-      });
   }
 
   loginUser(user) {
@@ -79,8 +73,6 @@ export default class UserService {
       } else {
         return null;
       }
-    }).catch(err => {
-      return err;
-    });
+    })
   }
 }

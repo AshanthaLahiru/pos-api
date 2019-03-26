@@ -13,7 +13,14 @@ export default class OrderRepository extends BaseRepository {
     return self
       ._insert(order)
       .then(result => {
-        return result;
+        if (result && result.result.ok == 1) {
+          let res = {
+            status: "success"
+          }
+          return res;
+        } else {
+          return null;
+        }
       })
       .catch(err => {
         console.log(err);
@@ -61,7 +68,14 @@ export default class OrderRepository extends BaseRepository {
     return self
       ._update(query, updateOrder)
       .then(result => {
-        return result;
+        if (result && result.result.ok == 1) {
+          let res = {
+            status: "success"
+          }
+          return res;
+        } else {
+          return null;
+        }
       })
       .catch(err => {
         console.log(err);
@@ -77,7 +91,14 @@ export default class OrderRepository extends BaseRepository {
     return self
       ._remove(deleteOrder)
       .then(result => {
-        return result;
+        if (result && result.result.ok == 1) {
+          let res = {
+            status: "success"
+          }
+          return res;
+        } else {
+          return null;
+        }
       })
       .catch(err => {
         console.log(err);

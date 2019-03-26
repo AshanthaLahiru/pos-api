@@ -3,9 +3,8 @@ import { isArray } from "util";
 let self;
 
 export default class OrderService {
-  constructor(constants, userRepository, orderRepository, itemRepository) {
+  constructor(orderRepository, itemRepository) {
     self = this;
-    self.constants = constants;
     self.orderRepository = orderRepository;
     self.itemRepository = itemRepository;
   }
@@ -16,10 +15,6 @@ export default class OrderService {
       .then(result => {
         return result;
       })
-      .catch(err => {
-        console.log(err);
-        return err;
-      });
   }
 
   deleteOrderByOrderId(orderId) {
@@ -28,10 +23,6 @@ export default class OrderService {
       .then(result => {
         return result;
       })
-      .catch(err => {
-        console.log(err);
-        return err;
-      });
   }
 
   updateOrderByOrderId(orderId, order) {
@@ -40,10 +31,6 @@ export default class OrderService {
       .then(result => {
         return result;
       })
-      .catch(err => {
-        console.log(err);
-        return err;
-      });
   }
 
   getOrdersByEmail(email) {
@@ -52,10 +39,6 @@ export default class OrderService {
       .then(result => {
         return result;
       })
-      .catch(err => {
-        console.log(err);
-        return err;
-      });
   }
 
 
@@ -67,21 +50,23 @@ export default class OrderService {
           return self.itemRepository.getAllItems()
             .then(itemArray => {
               if (itemArray && isArray(itemArray)) {
-                result.items.map((item) => {
+                let tempArray = [];
+                result.items.forEach((item) => {
                   let tempObj = itemArray.find((arrayItem) => arrayItem.id == item.id);
                   if (tempObj) {
-                    Object.assign(item, tempObj);
+                    tempArray.push(Object.assign({}, item, tempObj));
                   }
                 })
+                result.items = tempArray;
                 delete result._id;
                 return result;
+              } else {
+                return null;
               }
             })
+        } else {
+          return null;
         }
       })
-      .catch(err => {
-        console.log(err);
-        return err;
-      });
   }
 }
