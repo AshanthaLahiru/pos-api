@@ -49,6 +49,10 @@ export default class OrderController {
    *         description: An unknown issue occurred
    */
   createOrder(req, res, next) {
+    if (!req.body) {
+      throw new Error("Missing Body Parameteres");
+    }
+
     self.orderService
       .createOrder(req.body)
       .then(result => {
@@ -93,6 +97,10 @@ export default class OrderController {
    *         description: An unknown issue occurred
    */
   getOrdersByEmail(req, res, next) {
+    if (!req.params.email) {
+      throw new Error("Missing Parameters");
+    }
+
     self.orderService
       .getOrdersByEmail(req.params.email)
       .then(result => {
@@ -136,6 +144,10 @@ export default class OrderController {
    *         description: An unknown issue occurred
    */
   getOrderItemsByOrderId(req, res, next) {
+    if (!req.params.orderId) {
+      throw new Error("Missing Parameters");
+    }
+
     self.orderService
       .getOrderItemsByOrderId(req.params.orderId)
       .then(result => {
@@ -184,8 +196,12 @@ export default class OrderController {
    *         description: An unknown issue occurred
    */
   removeOrderByOrderId(req, res, next) {
+    if (!req.params.orderId) {
+      throw new Error("Missing Parameters");
+    }
+
     self.orderService
-      .removeOrderByOrderId(req.params.name)
+      .removeOrderByOrderId(req.params.orderId)
       .then(result => {
         if (result) {
           res.status(200).json({ status: "Delete Successful" });
@@ -237,6 +253,14 @@ export default class OrderController {
   *         description: An unknown issue occurred
   */
   updateOrderByOrderId(req, res, next) {
+    if (!req.params.orderId) {
+      throw new Error("Missing Parameters");
+    }
+
+    if (!req.body) {
+      throw new Error("Missing Body Parameters");
+    }
+
     self.orderService
       .updateOrderByOrderId(req.params.orderId, req.body)
       .then(result => {

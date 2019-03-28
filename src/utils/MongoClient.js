@@ -9,6 +9,9 @@ export default class MongoClient {
         mongodb.MongoClient.connect(self.constants.dburl, { useNewUrlParser: true })
             .then(client => {
                 self.db = client.db(this.constants.dbname);
+            })
+            .catch((err) => {
+                console.log(err);
             });
     }
 

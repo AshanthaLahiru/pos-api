@@ -48,6 +48,10 @@ export default class ItemController {
    *         description: An unknown issue occurred
    */
   createItem(req, res, next) {
+    if (!req.body) {
+      throw new Error("Missing Body Parameters");
+    }
+
     self.itemService
       .createItem(req.body)
       .then(result => {
@@ -92,8 +96,12 @@ export default class ItemController {
    *         description: An unknown issue occurred
    */
   getItemById(req, res, next) {
+    if (!req.params.itemId) {
+      throw new Error("Missing Parameters");
+    }
+
     self.itemService
-      .getItemById(req.params.id)
+      .getItemById(req.params.itemId)
       .then(result => {
         if (result) {
           res.status(200).json(result);
@@ -145,8 +153,12 @@ export default class ItemController {
    *         description: An unknown issue occurred
    */
   updateItemById(req, res, next) {
+    if (!req.params.itemId) {
+      throw new Error("Missing Parameters");
+    }
+
     self.itemService
-      .updateOrderByOrderId(req.params.name, req.body)
+      .updateOrderByOrderId(req.params.itemId, req.body)
       .then(result => {
         if (result) {
           res.status(200).json({ status: "Update Successful" });
@@ -189,8 +201,12 @@ export default class ItemController {
  *         description: An unknown issue occurred
  */
   removeItemById(req, res, next) {
+    if (!req.params.itemId) {
+      throw new Error("Missing Parameters");
+    }
+
     self.itemService
-      .removeOrderByOrderId(req.params.name)
+      .removeOrderByOrderId(req.params.itemId)
       .then(result => {
         if (result) {
           res.status(200).json({ status: "Delete Successful" });
@@ -230,7 +246,7 @@ export default class ItemController {
    */
   getAllItems(req, res, next) {
     self.itemService
-      .getAllItems(req.params.id)
+      .getAllItems()
       .then(result => {
         if (result) {
           res.status(200).json(result);

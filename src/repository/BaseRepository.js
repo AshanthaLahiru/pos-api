@@ -11,15 +11,22 @@ export default class BaseRepository {
     return this.mongoClient.getDB()
       .collection(this.collectionName)
       .insertOne(object)
-      .then(result => result);
-
+      .then(result => result)
+      .catch((err) => {
+        console.log(err);
+        return null;
+      })
   }
 
   _find(query) {
     return this.mongoClient.getDB()
       .collection(this.collectionName)
       .findOne(query)
-      .then(result => result);
+      .then(result => result)
+      .catch((err) => {
+        console.log(err);
+        return null;
+      })
   }
 
   _findAll(query) {
@@ -29,23 +36,33 @@ export default class BaseRepository {
       .sort({ _id: -1 })
       .project({ _id: 0 })
       .toArray()
-      .then(result => result);
-
+      .then(result => result)
+      .catch((err) => {
+        console.log(err);
+        return null;
+      })
   }
 
   _remove(query) {
     return this.mongoClient.getDB()
       .collection(this.collectionName)
       .deleteOne(query)
-      .then(result => result);
-
+      .then(result => result)
+      .catch((err) => {
+        console.log(err);
+        return null;
+      })
   }
 
   _update(query, updateDoc) {
     return this.mongoClient.getDB()
       .collection(this.collectionName)
       .replaceOne(query, updateDoc)
-      .then(result => result);
+      .then(result => result)
+      .catch((err) => {
+        console.log(err);
+        return null;
+      })
   }
 
   _bulkInsert(docs, schema) {
@@ -53,6 +70,10 @@ export default class BaseRepository {
       .db(this.constants.dbname)
       .collection(this.collectionName)
       .inserAll(object)
-      .then(result => result);
+      .then(result => result)
+      .catch((err) => {
+        console.log(err);
+        return null;
+      })
   }
 }

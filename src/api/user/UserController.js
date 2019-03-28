@@ -1,12 +1,10 @@
 let self;
 
 export default class UserController {
-  constructor(express, userService, constants, auth) {
+  constructor(express, userService) {
     self = this;
     self.expressRouter = new express.Router();
     self.userService = userService;
-    self.constants = constants;
-    self.auth = auth;
 
     self.expressRouter.post("/", self.insertUser);
     self.expressRouter.put("/:email", self.updateUser);
@@ -47,6 +45,10 @@ export default class UserController {
    *         description: An unknown issue occurred
    */
   insertUser(req, res, next) {
+    if (!req.body) {
+      throw new Error("Missing Body");
+    }
+
     self.userService
       .insertUser(req.body)
       .then(result => {
@@ -91,6 +93,10 @@ export default class UserController {
   *         description: An unknown issue occurred
   */
   findUser(req, res, next) {
+    if (!req.params.email) {
+      throw new Error("Missing Parameters");
+    }
+
     self.userService
       .findUser(req.params.email)
       .then(result => {
@@ -138,6 +144,10 @@ export default class UserController {
   *         description: An unknown issue occurred
   */
   updateUser(req, res, next) {
+    if (!req.params.email) {
+      throw new Error("Missing Parameters");
+    }
+
     self.userService
       .updateUser(req.params.email, req.body)
       .then(result => {
@@ -185,8 +195,12 @@ export default class UserController {
   *         description: An unknown issue occurred
   */
   removeUser(req, res, next) {
+    if (!req.params.email) {
+      throw new Error("Missing Parameters");
+    }
+
     self.userService
-      .removeUser(req.params.name)
+      .removeUser(req.params.email)
       .then(result => {
         if (result) {
           res.status(200).json({ status: "Delete Successful" });
@@ -237,13 +251,14 @@ export default class UserController {
   *         description: An unknown issue occurred
   */
   loginUser(req, res, next) {
+    if (!(req.body.email && req.body.password)) {
+      throw new Error("Missing Body");
+    }
+
     self.userService
       .loginUser(req.body)
       .then(result => {
-        if (result instanceof Error) {
-          throw result;
-        }
-        else if (result) {
+        if (result) {
           res.status(200).json(result);
         } else {
           res.status(403).json({ status: "Authentication Failed" });

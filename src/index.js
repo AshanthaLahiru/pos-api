@@ -20,7 +20,6 @@ app.use(function (err, req, res, next) {
   res.json({
     code: err.name,
     error: err.message,
-    stack: err.stack
   });
 })
 

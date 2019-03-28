@@ -25,7 +25,7 @@ export default class UserRepository extends BaseRepository {
       })
       .catch(err => {
         console.log(err);
-        return err;
+        return null;
       });
   }
 
@@ -33,6 +33,7 @@ export default class UserRepository extends BaseRepository {
     let query = {
       email: email
     };
+
     return self
       ._find(query)
       .then(result => {
@@ -44,7 +45,7 @@ export default class UserRepository extends BaseRepository {
       })
       .catch(err => {
         console.log(err);
-        return err;
+        return null;
       });
   }
 
@@ -67,7 +68,7 @@ export default class UserRepository extends BaseRepository {
       })
       .catch(err => {
         console.log(err);
-        return err;
+        return null;
       });
   }
 
@@ -90,7 +91,7 @@ export default class UserRepository extends BaseRepository {
       })
       .catch(err => {
         console.log(err);
-        return err;
+        return null;
       });
   }
 }
