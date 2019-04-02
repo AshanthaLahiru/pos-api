@@ -33,7 +33,7 @@ let swaggerDefinition = {
     title: "POS RESTful API Documentation"
   },
   host: 'pos-node-api.herokuapp.com',
-  schemes: ['http'],
+  schemes: ['https'],
   consumes: ["application/json"],
   produces: ["application/json"],
   securityDefinitions: {
