@@ -29,5 +29,8 @@
     "@babel/preset-env": "^7.3.4",
     "jest": "^24.5.0",
     "nodemon": "^1.18.10"
+  },
+  "engines": {
+    "node": "8.10.0"
   }
 }
