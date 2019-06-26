@@ -21,8 +21,8 @@
     "njwt": "^1.0.0",
     "password-hash": "^1.2.2",
     "swagger-jsdoc": "^3.2.7",
-    "@babel/preset-env": "^7.3.4",
-    "@babel/core": "^7.3.4"
+    "@babel/preset-env": "7.3.4",
+    "@babel/core": "7.3.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
